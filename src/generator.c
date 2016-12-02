@@ -11,9 +11,11 @@ int main(int argc, char *argv[]) {
   seedRng();
 
   writeRandomNumbers(count, out);
+  fclose(out);
 }
 
 void writeRandomNumbers(int count, FILE *fp) {
+  fprintf(fp, "%d\n", count);
   for(int i = 0; i < count; i++) {
     fprintf(fp, "%d\n", getNumber());
   }
