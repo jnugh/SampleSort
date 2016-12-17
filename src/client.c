@@ -17,12 +17,16 @@ int collectInputData(int **data){
   return recLen;
 }
 
-int selectSample(int *data, int dataLen){
-  return data[rand() % dataLen];
+int *selectSample(int *data, int dataLen){
+  int *result = malloc(SAMPLE_SIZE_EACH * sizeof(int));
+  for(int i = 0; i < SAMPLE_SIZE_EACH; i++) {
+    result[i] = data[rand() % dataLen];
+  }
+  return result;
 }
 
-void sendSample(int sample){
-  MPI_Send(&sample, 1, MPI_INT, 0, MPI_TAG_BOUNDARY, MPI_COMM_WORLD);
+void sendSample(int *sample){
+  MPI_Send(sample, SAMPLE_SIZE_EACH, MPI_INT, 0, MPI_TAG_BOUNDARY, MPI_COMM_WORLD);
 }
 
 void addToBucket(int value, int **bucket, int *bucketDataCount, size_t *bucketDataSize) {

@@ -1,8 +1,8 @@
 #pragma once
 
 int collectInputData();
-int selectSample();
-void sendSample();
+int *selectSample();
+void sendSample(int *sample);
 
 void collectBucketInformation();
 void distributeData();

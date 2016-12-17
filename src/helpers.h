@@ -1,5 +1,7 @@
 #pragma once
 
+#define SAMPLE_SIZE_EACH 50
+
 /**
  * Returns the length of result or -1 if an error occured.
  * Input file's first line needs to specify the number of lines following

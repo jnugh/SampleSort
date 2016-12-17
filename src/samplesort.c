@@ -35,7 +35,7 @@ int main (int argc, char *argv[]) {
   } else {
     int *localData;
     int dataSize = collectInputData(&localData);
-    int sample = selectSample(localData, dataSize);
+    int *sample = selectSample(localData, dataSize);
     sendSample(sample);
     dataSize = distributeToCorrectBuckets(&localData, dataSize, world_size, world_rank);
     sortLocallyAndNotify(localData, dataSize, world_rank);
