@@ -1,0 +1,7 @@
+#pragma once
+
+#define MPI_TAG_DATALEN 0
+#define MPI_TAG_DATA 1
+#define MPI_TAG_BOUNDARY 2
+#define MPI_TAG_GLOBAL_BOUNDARIES 3
+#define MPI_TAG_SENDERSTATUS 4
