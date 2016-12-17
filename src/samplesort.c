@@ -2,6 +2,9 @@
 #include "samplesort.h"
 #include "master.h"
 #include "client.h"
+#include "timer.h"
+#include "helpers.h"
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,13 +28,18 @@ int main (int argc, char *argv[]) {
     readAndDistribute(argv[1], world_size);
     int *bucketBoundaries = sortSample(world_size);
     distributeBucketInformation(bucketBoundaries, world_size);
-    free(bucketBoundaries);
+    gatherResults();
+    int *results;
+    int resultSize = fetchResults(&results, world_size);
+    writeResult(argv[2], results, resultSize);
   } else {
     int *localData;
     int dataSize = collectInputData(&localData);
     int sample = selectSample(localData, dataSize);
     sendSample(sample);
-    distributeToCorrectBuckets(&localData, dataSize, world_size, world_rank);
+    dataSize = distributeToCorrectBuckets(&localData, dataSize, world_size, world_rank);
+    sortLocallyAndNotify(localData, dataSize, world_rank);
+    sendData(localData, dataSize);
   }
 
   MPI_Finalize();

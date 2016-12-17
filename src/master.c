@@ -36,25 +36,44 @@ int *sortSample(int world_size){
 }
 
 void distributeBucketInformation(int *bucketBoundaries, int world_size){
+  int i;
   startTimer();
   MPI_Barrier(MPI_COMM_WORLD);
   MPI_Bcast(bucketBoundaries, world_size - 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-  for(int i = 1; i < world_size; i++) {
+  for(i = 1; i < world_size; i++) {
     //Synchronize sender information
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Bcast(&i, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
-    for(int i = 1; i < world_size; i++) {
-      int status = 0;
-      MPI_Recv(&status, 1, MPI_INT, i, MPI_TAG_SENDERSTATUS, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    }
-
-    for(int i = 1; i < world_size; i++) {
-      int status = 0;
-      MPI_Send(&status, 1, MPI_INT, i, MPI_TAG_SENDERSTATUS, MPI_COMM_WORLD);
-    }
   }
 
+  i = -1;
+  MPI_Barrier(MPI_COMM_WORLD);
+  MPI_Bcast(&i, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
   stopTimer("Distribute to buckets");
+}
+
+void gatherResults() {
+  startTimer();
+  MPI_Barrier(MPI_COMM_WORLD);
+  stopTimer("SortLocally all");
+}
+
+int fetchResults(int **data, int world_size) {
+  startTimer();
+  int sizes[world_size];
+  int sizeSum = 0;
+  for(int i = 1; i < world_size; i++) {
+    MPI_Recv(&(sizes[i-1]), 1, MPI_INT, i, MPI_TAG_RETURN_SIZE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    sizeSum += sizes[i-1];
+  }
+  *data = malloc(sizeSum * sizeof(int));
+  int pos = 0;
+  for(int i = 1; i < world_size; i++) {
+    MPI_Recv(&((*data)[pos]), sizes[i-1], MPI_INT, i, MPI_TAG_RETURN, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    pos += sizes[i-1];
+  }
+  stopTimer("FetchResults");
+  return sizeSum;
 }

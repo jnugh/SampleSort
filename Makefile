@@ -1,8 +1,8 @@
 CC=gcc
 MPICC=mpicc
-CFLAGS=-Wall
+CFLAGS=-Wall -ggdb -rdynamic
 
-SAMPLEDATA_SIZE="10000000"
+SAMPLEDATA_SIZE="300000000"
 SAMPLEDATA_LOCATION=res/sample
 SAMPLEDATA_QSORT_LOCATION=res/qsort_sample
 SAMPLEDATA_SSORT_LOCATION=res/ssort_sample
@@ -50,7 +50,7 @@ generator:
 generate-input: generator
 	bin/generator ${SAMPLEDATA_SIZE} ${SAMPLEDATA_LOCATION}
 
-bench: generate-input bench-quicksort
+bench: generate-input bench-quicksort bench-samplesort
 
 bench-quicksort: quick-sort
 	echo "Quicksort:"
@@ -58,4 +58,4 @@ bench-quicksort: quick-sort
 
 bench-samplesort: sample-sort
 	echo "SampleSort:"
-	time mpirun -np 4 bin/samplesort ${SAMPLEDATA_LOCATION} ${SAMPLEDATA_SSORT_LOCATION}
+	time mpirun -np 8 bin/samplesort ${SAMPLEDATA_LOCATION} ${SAMPLEDATA_SSORT_LOCATION}
