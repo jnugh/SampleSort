@@ -9,7 +9,7 @@ int readData(const char *path, int **result) {
   char *line = NULL;
   int lineCount = -1;
   size_t len = 0;
-  ssize_t read;
+  size_t read;
   if(inFile == NULL) {
     printf("Could not open input file.\n");
     exit(1);
