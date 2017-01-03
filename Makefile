@@ -1,8 +1,8 @@
 CC=gcc
 MPICC=mpicc
-CFLAGS=-Wall -ggdb -rdynamic
+CFLAGS=-Wall -ggdb -rdynamic -std=c99
 
-SAMPLEDATA_SIZE="300000000"
+SAMPLEDATA_SIZE="300"
 SAMPLEDATA_LOCATION=res/sample
 SAMPLEDATA_QSORT_LOCATION=res/qsort_sample
 SAMPLEDATA_SSORT_LOCATION=res/ssort_sample
@@ -45,7 +45,7 @@ clean-out:
 	rm bin/generator
 
 generator:
-	${CC} src/generator.c -o bin/generator
+	${CC} ${CFLAGS} src/generator.c -o bin/generator
 
 generate-input: generator
 	bin/generator ${SAMPLEDATA_SIZE} ${SAMPLEDATA_LOCATION}
