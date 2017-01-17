@@ -39,10 +39,11 @@ src/client.o: src/client.c src/client.h
 clean: clean-res clean-out
 
 clean-res:
-	rm ${SAMPLEDATA_LOCATION}
+	rm -rf ${SAMPLEDATA_LOCATION}
 
 clean-out:
-	rm bin/generator
+	rm -rf bin/*
+	rm -rf src/*.o
 
 generator:
 	${CC} ${CFLAGS} src/generator.c -o bin/generator

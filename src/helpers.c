@@ -3,6 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int sampleSizeEach = 50;
+void setSampleSizeEach(int newSampleSizeEach) {
+  sampleSizeEach = newSampleSizeEach;
+}
+
+int getSampleSizeEach() {
+  return sampleSizeEach;
+}
+
 int readData(const char *path, int **result) {
   startTimer();
   FILE *inFile = fopen(path, "r");

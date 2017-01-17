@@ -7,6 +7,7 @@
 
 
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -20,10 +21,24 @@ int main (int argc, char *argv[]) {
 
   srand(time(NULL));
 
+  if(argc > 3) {
+    setSampleSizeEach(atoi(argv[3]));
+  }
+
+  if(argc > 4) {
+    if(strcmp(argv[4], "csv") == 0) {
+      setTimerMode(1);
+    }
+  }
+
   if(world_rank == 0) {
-    if(argc != 3) {
+    if(argc < 3) {
       showHelp();
       exit(1);
+    } else if(argc > 4) {
+      if(strcmp(argv[4], "csv") == 0) {
+        printf("%i, %i", world_size, getSampleSizeEach());
+      }
     }
     readAndDistribute(argv[1], world_size);
     int *bucketBoundaries = sortSample(world_size);

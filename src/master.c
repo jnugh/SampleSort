@@ -26,14 +26,14 @@ void readAndDistribute(const char *inputFile, int world_size){
 
 int *sortSample(int world_size){
   startTimer();
-  int bucketBoundariesBuffer[(world_size - 1) * SAMPLE_SIZE_EACH * sizeof(int)];
+  int bucketBoundariesBuffer[(world_size - 1) * getSampleSizeEach() * sizeof(int)];
   for(int i = 1; i < world_size; i++) {
-    MPI_Recv(&bucketBoundariesBuffer[(i - 1) * SAMPLE_SIZE_EACH], SAMPLE_SIZE_EACH, MPI_INT, i, MPI_TAG_BOUNDARY, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(&bucketBoundariesBuffer[(i - 1) * getSampleSizeEach()], getSampleSizeEach(), MPI_INT, i, MPI_TAG_BOUNDARY, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }
-  qsort(bucketBoundariesBuffer, (world_size - 1) * SAMPLE_SIZE_EACH, sizeof(int), cmpfunc);
+  qsort(bucketBoundariesBuffer, (world_size - 1) * getSampleSizeEach(), sizeof(int), cmpfunc);
 
   int *bucketBoundaries = malloc((world_size - 1) * sizeof(int));
-  int stepSize = (world_size - 1) * SAMPLE_SIZE_EACH / world_size;
+  int stepSize = (world_size - 1) * getSampleSizeEach() / world_size;
   for(int i = 0; i < world_size - 1; i++) {
     bucketBoundaries[i] = bucketBoundariesBuffer[(i + 1) * stepSize];
   }
